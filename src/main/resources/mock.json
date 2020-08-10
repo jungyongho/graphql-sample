@@ -1,0 +1,47 @@
+//https://run.mocky.io/v3/6e407ebf-2ac0-49b6-9cd2-19df9748fe62
+//Account
+{
+  "userId" : "111",
+  "loginName" : "jyh",
+  "gameAccountId":["G111" , "G222", "G333"]
+}
+//https://run.mocky.io/v3/33bba6c5-e621-4c42-9186-efdf2d02acc5
+//GameAccount1
+{
+  "gameAccountId" : "G111",
+  "nickName" : "test111",
+  "emailId" : "E111"
+}
+//https://run.mocky.io/v3/bdf8309a-7e6d-4430-8fb8-1dcd2682f289
+//GameAccount2
+{
+  "gameAccountId" : "G222",
+  "nickName" : "test222",
+  "emailId" : "E222"
+}
+//https://run.mocky.io/v3/869f4b5b-307e-47cf-b7e5-151345b9f5ec
+//GameAccount3
+{
+  "gameAccountId" : "G333",
+  "nickName" : "test333",
+  "emailId" : "E333"
+}
+//https://run.mocky.io/v3/25c81f3e-8400-4c2a-a366-2331df517714
+//Email1
+{
+  "emailId" : "E111",
+  "email" : "jyh@naver.com"
+}
+//https://run.mocky.io/v3/102fb6c7-2fdc-4252-8998-6cfc6f1c5c72
+//Email2
+{
+  "emailId" : "E222",
+  "email" : "jyh@gmail.com"
+}
+//https://run.mocky.io/v3/103bf964-bd9a-4003-be81-628949421689
+//Email3
+{
+  "emailId" : "E333",
+  "email" : "jyh@ncsoft.com"
+}
+
