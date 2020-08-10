@@ -4,6 +4,7 @@ import com.expediagroup.graphql.execution.FunctionDataFetcher
 import com.expediagroup.graphql.execution.SimpleKotlinDataFetcherFactoryProvider
 import com.expediagroup.graphql.hooks.SchemaGeneratorHooks
 import com.fasterxml.jackson.databind.ObjectMapper
+import graphql.schema.DataFetcherFactories
 import graphql.schema.DataFetcherFactory
 import graphql.schema.DataFetchingEnvironment
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -11,7 +12,9 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.web.reactive.config.EnableWebFlux
 import reactor.core.publisher.Mono
+import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
+import kotlin.reflect.KProperty
 import kotlin.reflect.KType
 
 @SpringBootApplication
@@ -58,5 +61,10 @@ class CustomDataFetcherFactoryProvider(
 				objectMapper = objectMapper)
 	}
 
-
+	override fun propertyDataFetcherFactory(kClass: KClass<*>, kProperty: KProperty<*>): DataFetcherFactory<Any?> =
+			if (kProperty.isLateinit) {
+				DataFetcherFactories.useDataFetcher(GameAccountDataFetcher())
+			} else {
+				super.propertyDataFetcherFactory(kClass, kProperty)
+			}
 }
