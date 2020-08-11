@@ -25,6 +25,7 @@ data class Account(
     var loginName:String,
     var gameAccountId:List<String>
 ){
+    private val log = org.slf4j.LoggerFactory.getLogger(Account::class.java)
 
     fun gameAccounts():Mono<List<GameAccount>>{
         return this.gameAccountId.toList().toFlux()
@@ -32,19 +33,25 @@ data class Account(
                 .collectList()
     }
     fun gameAccount(id:String):Mono<GameAccount>{
-
-        if(id == "G111")
-            return WebClient.builder().build().get()
-                    .uri("https://run.mocky.io/v3/33bba6c5-e621-4c42-9186-efdf2d02acc5")
-                    .retrieve().bodyToMono(GameAccount::class.java)
-        else if(id == "G222")
-            return WebClient.builder().build().get()
-                    .uri("https://run.mocky.io/v3/bdf8309a-7e6d-4430-8fb8-1dcd2682f289")
-                    .retrieve().bodyToMono(GameAccount::class.java)
+        log.info("api call gameAccount")
+        var url = "https://run.mocky.io/v3/33bba6c5-e621-4c42-9186-efdf2d02acc5"
+        if(id == "G222")
+            url = "https://run.mocky.io/v3/bdf8309a-7e6d-4430-8fb8-1dcd2682f289"
         else
-            return WebClient.builder().build().get()
-                    .uri("https://run.mocky.io/v3/869f4b5b-307e-47cf-b7e5-151345b9f5ec")
-                    .retrieve().bodyToMono(GameAccount::class.java)
+            url = "https://run.mocky.io/v3/33bba6c5-e621-4c42-9186-efdf2d02acc5"
+
+        return WebClient.builder().build().get()
+                .uri(url)
+                .retrieve().bodyToMono(GameAccount::class.java)
+                .flatMap { it.nickName = it.nickName.plus("nn")
+                            Mono.just(it)}
+    }
+
+    fun emails():Mono<Email>{
+        log.info("api call emails")
+        return WebClient.builder().build().get().uri("https://run.mocky.io/v3/25c81f3e-8400-4c2a-a366-2331df517714")
+                .retrieve().bodyToMono(Email::class.java)
+//        return emailService.emails(emailId)
     }
 }
 
@@ -53,10 +60,15 @@ data class GameAccount(
     var nickName:String,
     var emailId:String
 ){
-    @Autowired
-    private lateinit var emailService: EmailService
+    private val log = org.slf4j.LoggerFactory.getLogger(GameAccount::class.java)
+//    @Autowired
+//    private lateinit var emailService: EmailService
+
     fun emails():Mono<Email>{
-        return emailService.emails(emailId)
+        log.info("api call emails")
+        return WebClient.builder().build().get().uri("https://run.mocky.io/v3/25c81f3e-8400-4c2a-a366-2331df517714")
+                .retrieve().bodyToMono(Email::class.java)
+//        return emailService.emails(emailId)
     }
 }
 

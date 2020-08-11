@@ -13,6 +13,7 @@ import reactor.kotlin.core.publisher.toMono
 
 @Component
 class AccountService {
+    private val log = org.slf4j.LoggerFactory.getLogger(Account::class.java)
     @Autowired
     lateinit var builder : WebClient.Builder
     lateinit var accountList:ArrayList<Account>
@@ -23,6 +24,8 @@ class AccountService {
     }
 //    https://run.mocky.io/v3/ec48c536-fa44-405d-bfc1-6b7425b9c0af
     fun getAccountList(): Mono<List<Account>> {
+
+        log.info("api call getAccountList")
         return builder.build().get()
                 .uri("https://run.mocky.io/v3/ec48c536-fa44-405d-bfc1-6b7425b9c0af")
                 .retrieve().bodyToFlux(Account::class.java)//bodyToMono(List<Account>::class.java)
