@@ -33,6 +33,7 @@ dependencies {
 	implementation("com.expediagroup:graphql-kotlin-spring-server:3.6.0")
 	implementation("ch.qos.logback:logback-classic:1.1.7")
 
+
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {

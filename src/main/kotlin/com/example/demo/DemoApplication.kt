@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import graphql.schema.DataFetcherFactories
 import graphql.schema.DataFetcherFactory
 import graphql.schema.DataFetchingEnvironment
+import graphql.schema.GraphQLType
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
@@ -36,7 +37,16 @@ fun main(args: Array<String>) {
 	runApplication<DemoApplication>(*args)
 }
 
+//todo :willGenerrate 파보기.
 class MonadHooks : SchemaGeneratorHooks {
+	override fun willGenerateGraphQLType(type: KType): GraphQLType? {
+		when(type.classifier){
+			Mono::class -> type.arguments.firstOrNull()?.type
+			else -> type
+		} ?: type
+		return super.willGenerateGraphQLType(type)
+
+	}
 	override fun willResolveMonad(type: KType): KType = when (type.classifier) {
 		Mono::class -> type.arguments.firstOrNull()?.type
 		else -> type

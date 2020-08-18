@@ -26,7 +26,7 @@ data class Account(
     var gameAccountId:List<String>
 ){
     private val log = org.slf4j.LoggerFactory.getLogger(Account::class.java)
-
+    lateinit var gameAccountDatafetcher:Mono<GameAccount>
     fun gameAccounts():Mono<List<GameAccount>>{
         return this.gameAccountId.toList().toFlux()
                 .flatMap { gameAccount(it) }
@@ -57,8 +57,7 @@ data class Account(
 
 data class GameAccount(
     var gameAccountId:String,
-    var nickName:String,
-    var emailId:String
+    var nickName:String
 ){
     private val log = org.slf4j.LoggerFactory.getLogger(GameAccount::class.java)
 //    @Autowired
