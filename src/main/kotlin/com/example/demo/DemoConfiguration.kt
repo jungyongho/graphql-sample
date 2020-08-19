@@ -8,13 +8,13 @@ import org.springframework.context.annotation.Configuration
 import java.util.concurrent.CompletableFuture
 
 @Configuration
-class DemoConfiguration {
+class DemoConfiguration (private val accountService: AccountService){
     @Bean
     fun dataLoaderRegistryFactory(): DataLoaderRegistryFactory {
         return object : DataLoaderRegistryFactory {
             override fun generate(): DataLoaderRegistry {
                 val registry = DataLoaderRegistry()
-                registry.register(ACCOUNT_LOADER_NAME, accountLoader)
+                registry.register(ACCOUNT_LOADER_NAME, accountService.accountLoader)
                 return registry
             }
         }

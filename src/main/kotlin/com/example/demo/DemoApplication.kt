@@ -13,6 +13,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.web.reactive.config.EnableWebFlux
 import reactor.core.publisher.Mono
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.KProperty
@@ -39,13 +40,8 @@ fun main(args: Array<String>) {
 
 //todo :willGenerrate 파보기.
 class MonadHooks : SchemaGeneratorHooks {
-	override fun willGenerateGraphQLType(type: KType): GraphQLType? {
-		when(type.classifier){
-			Mono::class -> type.arguments.firstOrNull()?.type
-			else -> type
-		} ?: type
-		return super.willGenerateGraphQLType(type)
-
+	override fun willAddGraphQLTypeToSchema(type: KType, generatedType: GraphQLType): GraphQLType {
+		return super.willAddGraphQLTypeToSchema(type, generatedType)
 	}
 	override fun willResolveMonad(type: KType): KType = when (type.classifier) {
 		Mono::class -> type.arguments.firstOrNull()?.type
