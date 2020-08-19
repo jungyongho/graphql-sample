@@ -56,7 +56,7 @@ class MonadHooks : SchemaGeneratorHooks {
 class CustomFunctionDataFetcher(target: Any?, fn: KFunction<*>, objectMapper: ObjectMapper) : FunctionDataFetcher(target, fn, objectMapper) {
 	override fun get(environment: DataFetchingEnvironment): Any? = when (val result = super.get(environment)) {
 		is Mono<*> -> result.toFuture()
-		else -> result
+		else -> result //MONOFlatMap
 	}
 }
 

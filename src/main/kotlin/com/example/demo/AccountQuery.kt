@@ -3,6 +3,7 @@ package com.example.demo
 import com.expediagroup.graphql.annotations.GraphQLDescription
 import com.expediagroup.graphql.spring.operations.Query
 import graphql.schema.DataFetchingEnvironment
+import kotlinx.coroutines.future.await
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -17,6 +18,18 @@ class AccountQuery(private val accountService: AccountService, private val gameA
     fun getAccountListMono():Mono<List<Account>>{
         return accountService.getAccountList()
     }
+    fun getCustomer():Mono<Customer>{
+        return Mono.just(Customer("jung"))
+    }
+}
+
+data class Customer(
+    var name:String
+){
+    suspend fun accounts(environment: DataFetchingEnvironment): Mono<Account>{
+        return environment.getDataLoader<String, Mono<Account>>(ACCOUNT_LOADER_NAME)
+                .load("userID0").await()
+    }
 }
 
 @GraphQLDescription("")
@@ -26,7 +39,7 @@ data class Account(
     var gameAccountId:List<String>
 ){
     private val log = org.slf4j.LoggerFactory.getLogger(Account::class.java)
-    lateinit var gameAccountDatafetcher:Mono<GameAccount>
+//    lateinit var gameAccountDatafetcher:Mono<GameAccount>
     fun gameAccounts():Mono<List<GameAccount>>{
         return this.gameAccountId.toList().toFlux()
                 .flatMap { gameAccount(it) }

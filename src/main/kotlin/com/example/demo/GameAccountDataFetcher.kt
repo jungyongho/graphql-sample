@@ -7,6 +7,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitLast
+import kotlinx.coroutines.runBlocking
+import org.dataloader.DataLoader
 import org.springframework.beans.factory.BeanFactory
 import org.springframework.beans.factory.BeanFactoryAware
 import org.springframework.stereotype.Component
@@ -17,6 +19,7 @@ import reactor.kotlin.adapter.rxjava.toCompletable
 import reactor.kotlin.core.publisher.toFlux
 import reactor.kotlin.core.publisher.toMono
 import java.util.concurrent.CompletableFuture
+
 
 @Component("GameAccountDataFetcher")
 class GameAccountDataFetcher:DataFetcher<Any?> {
