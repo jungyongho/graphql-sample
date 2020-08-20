@@ -14,16 +14,18 @@ import reactor.kotlin.adapter.rxjava.toCompletable
 import reactor.kotlin.core.publisher.toFlux
 import reactor.kotlin.core.publisher.toMono
 import java.util.concurrent.CompletableFuture
+import kotlin.random.Random
+import kotlin.streams.toList
 
 const val ACCOUNT_LOADER_NAME = "ACCOUNT_LOADER"
 
 @Component
 open class AccountService (private val builder : WebClient.Builder){
-    private val log = org.slf4j.LoggerFactory.getLogger(Account::class.java)
+    private val log = org.slf4j.LoggerFactory.getLogger(AccountService::class.java)
 
     val accountLoader = DataLoader<String, Mono<Account>> { ids ->
         CompletableFuture.supplyAsync {
-            listOf(getAccount(ids))
+            getAccountList(ids)
         }
     }
 
@@ -31,13 +33,19 @@ open class AccountService (private val builder : WebClient.Builder){
             return Mono.just(Account(userId.get(0), "", listOf("GA")))
     }
 
-    fun getAccountList(): Mono<List<Account>> {
+    fun getAccount(id:String): Mono<Account> {
 
-        log.info("api call getAccountList")
+        log.info("api call getAccountList::" + "https://run.mocky.io/v3/ec48c536-fa44-405d-bfc1-6b7425b9c0af/"+ id)
         return builder.build().get()
-                .uri("https://run.mocky.io/v3/ec48c536-fa44-405d-bfc1-6b7425b9c0af")
+                .uri("https://run.mocky.io/v3/ec48c536-fa44-405d-bfc1-6b7425b9c0af/"+ id)
                 .retrieve().bodyToFlux(Account::class.java)//bodyToMono(List<Account>::class.java)
-                .collectList()
-//        return accountList.toMono()
+                .last()
+    }
+//    Mono<List<Acconut>>
+    fun getAccountList(ids: List<String>): List<Mono<Account>>{
+        return ids.toList().stream().map { getAccount(it) }.toList()
+
+//        toFlux().flatMap { getAccount(it) }
+//                .collectList()
     }
 }

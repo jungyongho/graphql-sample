@@ -20,12 +20,15 @@ import reactor.kotlin.core.publisher.toFlux
 @Component
 @GraphQLDescription("")
 class AccountQuery(private val accountService: AccountService, private val gameAccountDataFetcher: GameAccountDataFetcher): Query{
-    @GraphQLDescription("Account:GameAccount 1:1 mapping")
-    fun getAccountListMono():Mono<List<Account>>{
-        return accountService.getAccountList()
-    }
+//    @GraphQLDescription("Account:GameAccount 1:1 mapping")
+//    fun getAccountListMono():Mono<List<Account>>{
+//        return accountService.getAccountList()
+//    }
     fun getCustomer():Mono<Customer>{
         return Mono.just(Customer("jung"))
+    }
+    fun getCustomers(): Mono<List<Customer>> {
+        return Mono.just(listOf(Customer("jung0"),Customer("jung1"),Customer("jung2"),Customer("jung3"),Customer("jung4")))
     }
 }
 
@@ -35,7 +38,7 @@ data class Customer(
     //success
     suspend fun accounts(environment: DataFetchingEnvironment): Account? {
         return environment.getDataLoader<String, Mono<Account>>(ACCOUNT_LOADER_NAME)
-                .load("userID0").await().awaitFirstOrNull()
+                .load(name).await().awaitFirstOrNull()
     }
     //fail
     suspend fun accounts2(environment: DataFetchingEnvironment): Mono<Account> {
